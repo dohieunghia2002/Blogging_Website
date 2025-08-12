@@ -95,7 +95,54 @@ const AuthService = {
         } catch (error) {
             return errorResponse(error.message, 500);
         }
-    } 
+    },
+
+    logout: async({ id }) => {
+        try {
+            const user = await User.findById(id);
+            if(!user) {
+                return errorResponse("user not found", 404);
+            }
+            user.refreshToken = null;
+            await user.save();
+            return successResponse("logout successful", null, 200);
+        } catch (error) {
+            return errorResponse(error.message, 500);
+        }
+    },
+
+    refreshToken: async({ refreshToken }) => {
+        try {
+            if(!refreshToken) {
+                return errorResponse("refreshtoken is required", 400);
+            }
+
+            const user = await User.findOne({ refreshToken });
+            if(!user) {
+                return errorResponse("invalid refreshtoken", 403);
+            }
+
+            let payload;
+            try {
+                payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
+            } catch (err) {
+                return errorResponse("refreshtoken expired or invalid", 403)
+            }
+
+            const newAccessToken = await generateAccessToken({ _id: user._id, role: user.role });
+            const newRefreshToken = await generateRefreshToken({ _id: user._id, role: user.role });
+
+            user.refreshToken = newRefreshToken;
+            await user.save();
+
+            return successResponse("token refreshed successfully", {
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken
+            }, 200);
+        } catch (error) {
+            return errorResponse(error.message, 500);
+        }
+    }
 }
 
 export default AuthService;
