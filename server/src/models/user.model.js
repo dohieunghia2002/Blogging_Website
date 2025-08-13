@@ -5,6 +5,7 @@ import mongooseDelete from 'mongoose-delete';
 const userSchema = new mongoose.Schema({
     name: {type: String, required: true, minlength: 2, maxlength: 40},
     penName: {type: String, required: true, minlength: 2, maxlength: 40, unique: true},
+    slug: {type: String, required: true, minlength: 2, maxlength: 40, unique: true},
     email: {type: String, required: true, unique: true},
     password: { type: String, required: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
