@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import mongooseDelete from 'mongoose-delete';
+import slugify from "slugify";
 
 
 const userSchema = new mongoose.Schema({
@@ -15,6 +16,13 @@ const userSchema = new mongoose.Schema({
     timestamps: true,
     collection: 'users'
 });
+
+userSchema.pre("save", function(next) {
+    if (this.isModified("penName")) {
+        this.slug = slugify(this.penName, { lower: true, strict: true });
+    }
+    next();
+})
 
 userSchema.plugin(mongooseDelete, {
     deletedBy: true,

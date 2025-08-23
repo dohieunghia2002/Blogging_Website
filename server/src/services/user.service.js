@@ -17,7 +17,19 @@ const UserService = {
 
     getUserByPenName: async({ penName }) => {
         try {
-            const user = await User.findOne({ penName }).select("name penName avatar role createdAt");
+            const user = await User.findOne({ penName }).select("name penName slug avatar role createdAt");
+            if(!user) {
+                return errorResponse("user not found", 404);
+            }
+            return successResponse("get public user profile successful", user, 200);
+        } catch (error) {
+            return errorResponse(error.message, 500);
+        }
+    },
+
+    getUserBySlug: async({ slug }) => {
+        try {
+            const user = await User.findOne({ slug }).select("name penName slug avatar role createdAt");
             if(!user) {
                 return errorResponse("user not found", 404);
             }

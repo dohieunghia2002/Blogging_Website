@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import slugify from "slugify";
 
 import User from "../models/user.model.js";
 import { errorResponse, successResponse } from "../helpers/response.helper.js";
@@ -36,6 +37,7 @@ const AuthService = {
                 name,
                 email,
                 penName,
+                slug: slugify(penName, { lower: true, strict: true }),
                 password: hashedPassword,
                 role: 'user'
             });
