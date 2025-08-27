@@ -4,13 +4,13 @@ import { errorResponse } from "../helpers/response.helper.js";
 const AuthController = {
     // [POST] /auth/signup
     signup: async(req, res) => {
-        const { name, penName, email, password } = req.body;
-        if (!name || !penName || !email || !password) {
+        const { fullname, penName, email, password } = req.body;
+        if (!fullname || !penName || !email || !password) {
             return res.status(400).json(
-                errorResponse('name, pen name, email, and password are required', 400)
+                errorResponse('fullname, pen name, email, and password are required', 400)
             );
         }
-        const result = await AuthService.signup({ name, penName, email, password });
+        const result = await AuthService.signup({ fullname, penName, email, password });
         return res.status(result.statusCode).json(result);
 
     },

@@ -22,7 +22,7 @@ const generateRefreshToken = async ({ _id, role }) => {
 };
 
 const AuthService = {
-    signup: async({ name, penName, email, password }) => {
+    signup: async({ fullname, penName, email, password }) => {
         try {
             const userExist = await User.findOne({ email });
             if(userExist) return errorResponse("email already registered", 409);
@@ -34,7 +34,7 @@ const AuthService = {
             const hashedPassword = await bcrypt.hash(password, salt);
 
             const newUser = new User({
-                name,
+                fullname,
                 email,
                 penName,
                 slug: slugify(penName, { lower: true, strict: true }),
@@ -56,7 +56,7 @@ const AuthService = {
 
             return successResponse("register successful", {
                 id: newUser._id,
-                name: newUser.name,
+                fullname: newUser.fullname,
                 penName: newUser.penName,
                 email: newUser.email,
                 avatar: newUser.avatar,
@@ -87,7 +87,7 @@ const AuthService = {
 
             return successResponse("login successful", {
                 id: user._id,
-                name: user.name,
+                fullname: user.fullname,
                 penName: user.penName,
                 email: user.email,
                 avatar: user.avatar,

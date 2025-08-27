@@ -4,11 +4,11 @@ import slugify from "slugify";
 
 
 const userSchema = new mongoose.Schema({
-    name: {type: String, required: true, minlength: 2, maxlength: 40},
-    penName: {type: String, required: true, minlength: 2, maxlength: 40, unique: true},
-    slug: {type: String, required: true, minlength: 2, maxlength: 40, unique: true},
+    fullname: {type: String, required: true, minlength: 2, maxlength: 100},
+    penName: {type: String, required: true, minlength: 2, maxlength: 60, unique: true},
+    slug: {type: String, required: true, minlength: 2, maxlength: 60, unique: true},
     email: {type: String, required: true, unique: true},
-    password: { type: String, required: true },
+    password: { type: String, minlength: 8, required: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     avatar: {type: String, default: 'https://icons.veryicon.com/png/o/miscellaneous/rookie-official-icon-gallery/225-default-avatar.png'},
     refreshToken: { type: String }
