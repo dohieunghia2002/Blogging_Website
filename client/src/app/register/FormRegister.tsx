@@ -34,9 +34,7 @@ export function FormRegister() {
   })
 
   async function onSubmit(values: RegisterBodyType) {
-    try {
-      console.log(JSON.stringify(values));
-      
+    try {      
       const res = await fetch(`${envConfig.NEXT_PUBLIC_SERVER_API}/auth/signup`, {
         body: JSON.stringify(values),
         headers: { "Content-Type": "application/json" },

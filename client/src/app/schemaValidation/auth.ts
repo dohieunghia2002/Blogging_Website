@@ -33,24 +33,24 @@ export const RegisterRes = z.object({
 
 export type RegisterResType = z.TypeOf<typeof RegisterRes>
 
-// export const LoginBody = z.object({
-//     email: z.string().email(),
-//     password: z.string().min(6).max(100)
-// }).strict()
+export const LoginBody = z.object({
+    email: z.string().email(),
+    password: z.string().min(8).max(30),
+})
 
-// export type LoginBodyType = z.TypeOf<typeof LoginBody>
+export type LoginBodyType = z.TypeOf<typeof LoginBody>
 
-// export const LoginRes = z.object({
-//     data: z.object({
-//         accesstoken: z.string(),
-//         userData: z.object({
-//             id: z.string(),
-//             fullname: z.string(),
-//             email: z.string(),
-//             avatar: z.string(),
-//             isAdmin: z.boolean()
-//         })
-//     })
-// })
+export const LoginRes = z.object({
+    data: z.object({
+        accessToken: z.string(),
+        userData: z.object({
+            id: z.string(),
+            fullname: z.string(),
+            email: z.string(),
+            role: z.string()
+        })
+    }),
+    message: z.string()
+})
 
-// export type LoginResType = z.TypeOf<typeof LoginRes>
+export type LoginResType = z.TypeOf<typeof LoginRes>
