@@ -1,5 +1,6 @@
 "use client"
 import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
@@ -27,32 +28,18 @@ export function FormLogin() {
         },
     })
 
-    async function onSubmit(values: LoginBodyType) {
-        try {
-            const res = await fetch(`${envConfig.NEXT_PUBLIC_SERVER_API}/auth/login`, {
-                body: JSON.stringify(values),
-                headers: { "Content-Type": "application/json" },
-                method: "POST",
-            })
+    async function onSubmit(values: { email: string; password: string }) {
+        const res = await signIn("credentials", {
+            redirect: false,
+            email: values.email,
+            password: values.password,
+        })
 
-            const result = await res.json()
-            console.log(res)
-
-            if (!res.ok) {
-                toast.error(result.message || "Đăng nhập thất bại")
-                return
-            }
-
+        if (res?.error) {
+            toast.error("Đăng nhập thất bại ❌")
+        } else {
             toast.success("Đăng nhập thành công 🎉")
-
-            // Lưu token (ví dụ vào localStorage)
-            localStorage.setItem("accessToken", result.data.accessToken)
-
-            setTimeout(() => {
-                router.push("/")
-            }, 8000)
-        } catch (error) {
-            toast.error("Không thể kết nối đến server")
+            router.push("/")
         }
     }
 
